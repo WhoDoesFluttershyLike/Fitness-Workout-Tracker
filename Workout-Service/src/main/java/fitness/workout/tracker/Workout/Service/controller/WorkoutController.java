@@ -4,12 +4,11 @@ import fitness.workout.tracker.Workout.Service.dto.WorkoutDTO;
 import fitness.workout.tracker.Workout.Service.entity.Workout;
 import fitness.workout.tracker.Workout.Service.jwt.JwtService;
 import fitness.workout.tracker.Workout.Service.service.WorkoutService;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -17,10 +16,12 @@ import java.util.List;
 public class WorkoutController {
     private final WorkoutService workoutService;
     private final JwtService jwtService;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public WorkoutController(WorkoutService workoutService, JwtService jwtService) {
+    public WorkoutController(WorkoutService workoutService, JwtService jwtService, KafkaTemplate<String, String> kafkaTemplate) {
         this.workoutService = workoutService;
         this.jwtService = jwtService;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @PostMapping
@@ -60,4 +61,10 @@ public class WorkoutController {
 //                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 //       return workoutService.getWorkoutByUserIdAndDateBetween(username, startDate, endDate);
 //    }
+
+    @PostMapping("/message")
+    public String sendMessage(@RequestParam String message){
+        kafkaTemplate.send("test", message);
+        return "Success";
+    }
 }

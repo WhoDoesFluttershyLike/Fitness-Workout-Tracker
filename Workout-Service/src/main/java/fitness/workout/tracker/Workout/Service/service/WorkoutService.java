@@ -5,14 +5,12 @@ import fitness.workout.tracker.Workout.Service.entity.Workout;
 import fitness.workout.tracker.Workout.Service.repository.WorkoutRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class WorkoutService {
     private final WorkoutRepository workoutRepository;
-
     public WorkoutService(WorkoutRepository workoutRepository) {
         this.workoutRepository = workoutRepository;
     }
