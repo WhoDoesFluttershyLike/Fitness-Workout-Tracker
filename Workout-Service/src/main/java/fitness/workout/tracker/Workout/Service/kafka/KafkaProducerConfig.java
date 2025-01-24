@@ -17,7 +17,6 @@ public class KafkaProducerConfig {
     private String bootstrapServers;
 
     @Bean
-
     public Map<String, Object> producerConfig(){
         HashMap<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);

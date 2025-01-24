@@ -16,4 +16,6 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
 //    List<Workout> findByUsernameAndDateBetween(@Param("username") String username, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     List<Workout> findByUsername(String username);
+
+    List<Workout> findByUsernameAndDateBetween(String username, LocalDate startDate, LocalDate endDate);
 }

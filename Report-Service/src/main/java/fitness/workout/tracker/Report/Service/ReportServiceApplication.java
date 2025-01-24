@@ -1,14 +1,13 @@
-package fitness.workout.tracker.Workout.Service;
+package fitness.workout.tracker.Report.Service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WorkoutServiceApplication {
+public class ReportServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WorkoutServiceApplication.class, args);
+		SpringApplication.run(ReportServiceApplication.class, args);
 	}
-
 
 }

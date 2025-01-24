@@ -64,7 +64,8 @@ public class WorkoutController {
 
     @PostMapping("/message")
     public String sendMessage(@RequestParam String message){
-        kafkaTemplate.send("test", message);
+        kafkaTemplate.send("workout", message);
+        System.out.println("Started...");
         return "Success";
     }
 }
