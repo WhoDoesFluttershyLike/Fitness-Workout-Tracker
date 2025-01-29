@@ -16,9 +16,9 @@ import java.util.List;
 public class WorkoutController {
     private final WorkoutService workoutService;
     private final JwtService jwtService;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, Workout> kafkaTemplate;
 
-    public WorkoutController(WorkoutService workoutService, JwtService jwtService, KafkaTemplate<String, String> kafkaTemplate) {
+    public WorkoutController(WorkoutService workoutService, JwtService jwtService, KafkaTemplate<String, Workout> kafkaTemplate) {
         this.workoutService = workoutService;
         this.jwtService = jwtService;
         this.kafkaTemplate = kafkaTemplate;
@@ -32,6 +32,9 @@ public class WorkoutController {
         String jwtToken = token.replace("Bearer ", "");
             String username = jwtService.extractUserFromToken(jwtToken);
             Workout workout = workoutService.createWorkout(username, workoutDTO);
+
+            kafkaTemplate.send("workout", workout);
+            System.out.println("Send: " + workout);
             return ResponseEntity.status(HttpStatus.CREATED).body(workout);
     }
 
@@ -62,10 +65,10 @@ public class WorkoutController {
 //       return workoutService.getWorkoutByUserIdAndDateBetween(username, startDate, endDate);
 //    }
 
-    @PostMapping("/message")
-    public String sendMessage(@RequestParam String message){
-        kafkaTemplate.send("workout", message);
-        System.out.println("Started...");
-        return "Success";
-    }
+//    @PostMapping("/message")
+//    public String sendMessage(@RequestParam String message){
+//        kafkaTemplate.send("workout", message);
+//        System.out.println("Started...");
+//        return "Success";
+//    }
 }

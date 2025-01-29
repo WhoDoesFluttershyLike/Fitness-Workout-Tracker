@@ -28,4 +28,5 @@ public class WorkoutDTO {
     public boolean isCompleted() {
         return completed;
     }
+
 }
