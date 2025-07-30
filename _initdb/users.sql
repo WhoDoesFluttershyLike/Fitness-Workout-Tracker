@@ -1,0 +1,5 @@
+CREATE DATABASE users_db;
+\connect users_db;
+CREATE USER users WITH PASSWORD 'users';
+GRANT ALL PRIVILEGES ON DATABASE users_db TO users;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

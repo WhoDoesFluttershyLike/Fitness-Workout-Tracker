@@ -1,0 +1,25 @@
+# Go
+bin/
+*.exe
+*.out
+
+# IDE/Editor
+.vscode/
+.idea/
+
+# Dependencies cache
+**/go.sum
+
+
+# Env & secrets
+*.env
+**/.env
+!.env.example
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
