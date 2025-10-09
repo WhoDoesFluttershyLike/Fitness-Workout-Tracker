@@ -1,0 +1,34 @@
+package service
+
+import(
+	"github.com/WhoDoesFluttershyLike/Fitness-Workout-Tracker/auth-service/internal/repository"
+	"github.com/WhoDoesFluttershyLike/Fitness-Workout-Tracker/auth-service/internal/models"
+ 	"golang.org/x/crypto/bcrypt"
+)
+
+type UserService struct{
+	repo *repository.UserRepository
+}
+
+func NewUserService(repo *repository.UserRepository) *UserService {
+    return &UserService{repo: repo}
+}
+
+func (s *UserService)Register(name, email, password string) error {
+	exist, _ := s.repo.GetByEmail(email)
+	if exist != nil {
+		return errors.New("email already in use")
+	}
+
+    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+    if err != nil {
+        return err
+    }
+
+	user := &models.User{
+		Name: name,
+		Email: email,
+		Password: hashedPassword
+	}
+	return s.repo.Create(user)
+}
