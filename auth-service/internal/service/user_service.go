@@ -3,6 +3,7 @@ package service
 import(
 	"github.com/WhoDoesFluttershyLike/Fitness-Workout-Tracker/auth-service/internal/repository"
 	"github.com/WhoDoesFluttershyLike/Fitness-Workout-Tracker/auth-service/internal/models"
+	"github.com/WhoDoesFluttershyLike/Fitness-Workout-Tracker/auth-service/internal/auth"
  	"golang.org/x/crypto/bcrypt"
 )
 
@@ -31,4 +32,24 @@ func (s *UserService)Register(name, email, password string) error {
 		Password: hashedPassword
 	}
 	return s.repo.Create(user)
+}
+
+func (s *UserService)Login(email, password string) (string, error) {
+	
+	user, err := s.repo.GetByEmail(email)
+	if err != nil {
+		return "", errors.New("invalid email or password")
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+    if err != nil {
+        return "", errors.New("invalid email or password")
+    }
+
+	token, err := auth.GenerateToken(user.ID, user.Email)
+    if err != nil {
+        return "", errors.New("failed to generate token")
+    }
+
+	return token, nil
 }
