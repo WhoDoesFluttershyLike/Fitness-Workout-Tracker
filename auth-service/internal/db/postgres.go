@@ -1,20 +1,17 @@
 package db
 
 import (
-	"database/sql"
-	"fmt"
-	
+	"gorm.io/driver/postgres"
+
 	_ "github.com/lib/pq"
+	"gorm.io/gorm"
 )
 
-func NewPostgresConnection(cfg *Config) (*sql.DB, error) {
-	db, err := sql.Open("postgres", cfg.DSN())
+func NewPostgresConnection(cfg *Config) (*gorm.DB, error) {
+	
+	db, err := gorm.Open(postgres.Open(cfg.DSN()), &gorm.Config{})
 	if err != nil {
-		return nil, fmt.Errorf("failed to open db: %w", err)
-	}
-
-	if err = db.Ping(); err != nil {
-		return nil, fmt.Errorf("failed to ping db: %w", err)
+		return nil, err
 	}
 
 	return db, nil
