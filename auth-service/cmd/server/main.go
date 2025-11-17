@@ -4,6 +4,9 @@ import (
 	"log"
 
 	"github.com/WhoDoesFluttershyLike/Fitness-Workout-Tracker/auth-service/internal/db"
+	"github.com/WhoDoesFluttershyLike/Fitness-Workout-Tracker/auth-service/internal/repository"
+	"github.com/WhoDoesFluttershyLike/Fitness-Workout-Tracker/auth-service/internal/http"
+	"github.com/WhoDoesFluttershyLike/Fitness-Workout-Tracker/auth-service/internal/service"
 )
 
 func main() {
@@ -15,8 +18,14 @@ func main() {
 	if err != nil {
 		log.Fatalf("DB connection error: %v", err)
 	}
-	defer database.Close()
-
 	// check connection
 	log.Println("Everything initialized. Ready to build services.")
+
+	// init layers
+    repo := repository.NewUserRepository(database)
+    srv := service.NewUserService(repo)
+    handler := http.NewHandler(srv)
+
+    // gin router
+    http.SetupRouter(handler).Run(":8080")
 }

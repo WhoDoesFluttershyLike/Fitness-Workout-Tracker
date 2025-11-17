@@ -8,12 +8,12 @@ import(
 var jwtKey = []byte("super_secret_key")
 
 type Claims struct{
-	UserID int    `json:"user_id"`
+	UserID int64    `json:"user_id"`
     Email  string `json:"email"`
     jwt.RegisteredClaims
 }
 
-func GenerateToken(userID int, email string) (string, error){
+func GenerateToken(userID int64, email string) (string, error){
 	expirationTime := time.Now().Add(24 * time.Hour)
 
 	claims := &Claims{
@@ -26,4 +26,17 @@ func GenerateToken(userID int, email string) (string, error){
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
     return token.SignedString(jwtKey)
+}
+
+func ParseToken(tokenStr string) (*Claims, error) {
+    claims := &Claims{}
+    token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
+        return jwtKey, nil
+    })
+
+    if err != nil || !token.Valid {
+        return nil, err
+    }
+
+    return claims, nil
 }
